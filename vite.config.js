@@ -6,4 +6,7 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   assetsInclude: ["**/*.wasm"],
+  optimizeDeps: {
+    exclude: ["@electric-sql/pglite"],
+  },
 });

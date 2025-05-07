@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { PGlite } from "@electric-sql/pglite";
-
-const db = new PGlite("idb://my-pgdata");
+import { usePGlite } from "@electric-sql/pglite-react";
 
 const PatientForm = () => {
   const [formData, setFormData] = useState({
@@ -11,26 +9,19 @@ const PatientForm = () => {
     symptoms: "",
   });
 
-  useEffect(() => {
-    const connectDB = async () => {
-      await db.exec(`
-        CREATE TABLE IF NOT EXISTS patients 
-        (id SERIAL PRIMARY KEY ,
-        name TEXT,
-        email TEXT,
-        age INTEGER,
-        Symptoms TEXT)
-        `);
-    };
-    connectDB();
-  }, []);
+  const db = usePGlite();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!db) return alert("Database not ready yet.");
+
     const { name, email, age, symptoms } = formData;
-    await db.query(
-      `INSERT INTO patients(name, email, age, symptoms) VALUES ('${name}', ${email}, ${age}, '${symptoms}')`
-    );
+
+    await db.exec(`
+      INSERT INTO patients(name, email, age, symptoms) 
+      VALUES ('${name}', '${email}', ${age}, '${symptoms}')
+    `);
+
     setFormData({ name: "", email: "", age: "", symptoms: "" }); //Reset form
   };
 
@@ -103,6 +94,7 @@ const PatientForm = () => {
         <button
           type="submit"
           className="bg-primary w-full p-3 text-white rounded-lg hover:bg-[#a98fef]"
+          disabled={!db}
         >
           Submit
         </button>
