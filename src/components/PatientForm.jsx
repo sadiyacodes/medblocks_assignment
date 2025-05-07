@@ -39,7 +39,7 @@ const PatientForm = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className=" flex items-center justify-center mt-1">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-md flex flex-col bg-white gap-4 p-6 rounded-xl shadow-md"

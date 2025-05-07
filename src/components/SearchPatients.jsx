@@ -5,8 +5,8 @@ const db = new PGlite("idb://my-pgdata");
 
 const SearchPatients = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    <div className="min-h-screen flex items-center justify-center text-black">
+      SearcH patient component goes here
     </div>
   );
 };
