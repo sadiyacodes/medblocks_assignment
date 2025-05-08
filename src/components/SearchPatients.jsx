@@ -13,6 +13,7 @@ const SearchPatients = () => {
     const savedQuery = localStorage.getItem("lastQuery");
     if (savedQuery) {
       setQuery(savedQuery);
+      runQuery(savedQuery);
     }
   }, []);
 
