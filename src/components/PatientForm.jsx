@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { usePGlite } from "@electric-sql/pglite-react";
+import { toast, ToastContainer } from "react-toastify";
 
 const PatientForm = () => {
   const [formData, setFormData] = useState({
@@ -21,7 +22,10 @@ const PatientForm = () => {
       INSERT INTO patients(name, email, age, symptoms) 
       VALUES ('${name}', '${email}', ${age}, '${symptoms}')
     `);
-
+    toast.success("Patient registered successfully!", {
+      position: "top-center",
+      autoClose: 3000,
+    });
     setFormData({ name: "", email: "", age: "", symptoms: "" }); //Reset form
   };
 
@@ -31,6 +35,7 @@ const PatientForm = () => {
 
   return (
     <div className=" flex items-center justify-center mt-1">
+      <ToastContainer />
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-md flex flex-col bg-white gap-4 p-6 rounded-xl shadow-md"

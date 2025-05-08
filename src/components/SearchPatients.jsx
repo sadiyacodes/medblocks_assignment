@@ -1,11 +1,37 @@
 import React, { useEffect, useState } from "react";
-import { PGlite } from "@electric-sql/pglite";
 import { usePGlite, useLiveQuery } from "@electric-sql/pglite-react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const SearchPatients = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState({});
   const db = usePGlite();
+
+  // Restore last query from localStorage on mount
+  useEffect(() => {
+    const savedQuery = localStorage.getItem("lastQuery");
+    if (savedQuery) {
+      setQuery(savedQuery);
+      runQuery(savedQuery);
+    }
+  }, []);
+
+  // Run query and update state
+  const runQuery = async (queryToRun) => {
+    let response;
+    try {
+      const response = await db.query(queryToRun);
+      setResults(response);
+      localStorage.setItem("lastQuery", queryToRun); // Save query
+    } catch (error) {
+      toast.error(`Query error: ${error.message}`, {
+        position: "top-center",
+        autoClose: 3000,
+      });
+    }
+    console.log(response);
+  };
 
   const queryHandler = async (e) => {
     e.preventDefault();
@@ -13,16 +39,19 @@ const SearchPatients = () => {
 
     // ALLOWING ONLY SELECT QUERIES
     if (!query.trim().toUpperCase().startsWith("SELECT")) {
-      alert("Error: Only SELECT queries are allowed.");
+      toast.error("Only SELECT queries are allowed.", {
+        position: "top-center",
+        autoClose: 3000,
+      });
       return;
     }
-    const response = await db.query(query);
-    setResults(response);
-    console.log(response);
+    runQuery(query);
   };
 
   return (
     <div className="min-h-screen flex flex-col gap-4 items-center justify-center text-black">
+      <ToastContainer />
+
       <form
         className="flex flex-row gap-2 MAX-W-MD items-center justify-center"
         onSubmit={queryHandler}
@@ -33,6 +62,7 @@ const SearchPatients = () => {
         <textarea
           className="flex-2/3 border-2 font-thin font-mono cursor-crosshair"
           name="textbox"
+          value={query}
           onChange={(e) => {
             setQuery(e.target.value);
           }}
@@ -63,10 +93,10 @@ const SearchPatients = () => {
             </thead>
             <tbody>
               {results.rows.map((row, colIndex) => (
-                <tr>
+                <tr key={colIndex}>
                   {results.fields?.map((field, index) => (
                     <td
-                      key={colIndex}
+                      key={index}
                       className="border border-gray-300 px-4 py-2"
                     >
                       {row[field.name] ?? "NULL"}
