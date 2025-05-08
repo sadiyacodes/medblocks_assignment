@@ -13,7 +13,6 @@ const SearchPatients = () => {
     const savedQuery = localStorage.getItem("lastQuery");
     if (savedQuery) {
       setQuery(savedQuery);
-      runQuery(savedQuery);
     }
   }, []);
 
@@ -108,7 +107,8 @@ const SearchPatients = () => {
           </table>
         </div>
       ) : (
-        results && <p>No Results Found! :{`(`}</p>
+        results != undefined &&
+        results.rows?.length === 0 && <p>No Results Found! :{`(`}</p>
       )}
     </div>
   );
