@@ -49,42 +49,41 @@ const SearchPatients = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col gap-4 items-center justify-center text-black">
+    <div className="flex flex-col items-center justify-center px-4 py-8">
       <ToastContainer />
 
       <form
-        className="flex flex-row gap-2 MAX-W-MD items-center justify-center"
         onSubmit={queryHandler}
+        className="w-full max-w-xl bg-white p-6 rounded-lg shadow-md flex flex-col gap-4"
       >
-        <label htmlFor="textbox">
+        <label htmlFor="textbox" className="font-semibold text-gray-700">
           Enter your SQL query for searching patients
         </label>
         <textarea
-          className="flex-2/3 border-2 font-thin font-mono cursor-crosshair"
-          name="textbox"
+          id="textbox"
+          className="w-full border border-gray-300 rounded-md p-2 font-mono min-h-[120px] focus:outline-none focus:ring-2 focus:ring-blue-400"
           value={query}
-          onChange={(e) => {
-            setQuery(e.target.value);
-          }}
+          onChange={(e) => setQuery(e.target.value)}
         ></textarea>
-        <button
-          className="flex-1/3 font-normal bg-primary text-white"
-          type="submit"
-        >
-          SUBMIT
-        </button>
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            className="bg-primary text-white px-4 py-2 rounded hover:bg-[#a98fef] transition"
+          >
+            SUBMIT
+          </button>
+        </div>
       </form>
 
-      {/* TABLE TO SHOW RESULTS OBTAINED */}
       {results && results.rows?.length > 0 ? (
-        <div className="max-w-md">
-          <table className="table-auto border-collapse border border-gray-300">
+        <div className="mt-8 w-full max-w-4xl overflow-auto">
+          <table className="w-full table-auto border-collapse border border-gray-300">
             <thead>
               <tr>
                 {results.fields?.map((field, index) => (
                   <th
                     key={index}
-                    className="border border-gray-300 px-4 py-2 bg-gray-100"
+                    className="border border-gray-300 px-4 py-2 bg-gray-100 uppercase"
                   >
                     {field.name}
                   </th>
@@ -109,7 +108,9 @@ const SearchPatients = () => {
         </div>
       ) : (
         results != undefined &&
-        results.rows?.length === 0 && <p>No Results Found! :{`(`}</p>
+        results.rows?.length === 0 && (
+          <p className="mt-4 text-red-600 font-medium">No Results Found! :(</p>
+        )
       )}
     </div>
   );
