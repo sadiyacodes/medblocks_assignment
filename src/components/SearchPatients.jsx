@@ -57,10 +57,11 @@ const SearchPatients = () => {
         className="w-full max-w-xl bg-white p-6 rounded-lg shadow-md flex flex-col gap-4"
       >
         <label htmlFor="textbox" className="font-semibold text-gray-700">
-          Enter your SQL query for searching patients
+          Enter your SQL query for searching "patients" table
         </label>
         <textarea
           id="textbox"
+          placeholder="select * from patients"
           className="w-full border border-gray-300 rounded-md p-2 font-mono min-h-[120px] focus:outline-none focus:ring-2 focus:ring-blue-400"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
